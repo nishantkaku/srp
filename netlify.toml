@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Vite base path: Netlify serves the site at its domain root, so keep base "/".
+# (Only the GitHub Pages workflow overrides this with VITE_BASE_PATH.)
