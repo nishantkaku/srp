@@ -1,0 +1,96 @@
+/* SRP sticky bottom navigation — mobile only (inside #srp-mobile-content)
+   Figma: Bottom navigation 4497:28960 — 360×60, white, stroke #e8e8e8
+   Interaction (scroll hide) unchanged — visual revamp only. */
+
+.srp-page .srp-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 210;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 60px;
+  padding: 0 16px env(safe-area-inset-bottom, 0px);
+  background-color: var(--ds-color-warm-neutral-0);
+  border-top: 1px solid #e8e8e8;
+  transform: translateY(0);
+  transition: transform 0.24s ease;
+  will-change: transform;
+}
+
+.srp-page .srp-bottom-nav--hidden {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.srp-page .srp-mobile-content {
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  transition: padding-bottom 0.24s ease;
+}
+
+.srp-page .srp-mobile-content--nav-hidden {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Nav item — Figma 73×60 cells, icon 20 + label 12/16 */
+.srp-bottom-nav__item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  min-width: 0;
+  max-width: none;
+  box-sizing: border-box;
+  height: 60px;
+  padding: 12px 0 0;
+  border: none;
+  background: none;
+  text-decoration: none;
+  color: var(--ds-color-grey-neutral-800); /* #444444 */
+  font-family: "Google Sans Flex", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.srp-bottom-nav__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0 0 4px;
+  border-radius: 0;
+  background: none;
+}
+
+.srp-bottom-nav__icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.srp-bottom-nav__icon path {
+  fill: currentColor;
+  stroke: none;
+}
+
+.srp-bottom-nav__label {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: inherit;
+}

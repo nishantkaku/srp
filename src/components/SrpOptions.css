@@ -1,0 +1,1346 @@
+/* SRP mobile results — 3 stacked option sections of placeholder cards.
+   Mobile only (this file only ever loads inside #srp-mobile-content, which
+   base.css already hides above 48rem).
+   All values reference the project's real --ds-* design tokens.
+
+   Which-option-is-in-view is shown as the sticky search bar input value
+   (updated live via scroll spy in srp-main.js) -- no separate indicator
+   element on this page. */
+
+/* NOTE: do NOT put overflow-x:hidden (or any non-visible overflow) on
+   .srp-page, body, or html -- .srp-search-container (position: sticky)
+   is a descendant of .srp-page, and overflow on any ancestor other than
+   the actual scrolling viewport breaks position:sticky entirely. The
+   real fix for the earlier horizontal-scroll bug is in .srp-card-images
+   img below (flex: 1 1 0 instead of width: 50%, which was the actual
+   cause of the overflow) -- no ancestor-level overflow guard is needed
+   or safe here. */
+
+.srp-option-section {
+  /* Full-bleed cards -- no left/right inset here. */
+  padding: var(--ds-space-xl) 0 0;
+}
+
+.srp-option-section:first-child {
+  padding-top: 0;
+}
+
+.srp-results-meta-bar {
+  /* Figma Frame 2147261540 — 360×32, white */
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  padding: 8px 16px;
+  margin: 0;
+  background-color: var(--ds-color-warm-neutral-0);
+}
+
+.srp-results-meta {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  color: var(--ds-color-grey-neutral-800); /* #444444 */
+  font-family: var(--ds-font-family-primary);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.srp-results-meta__count {
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.srp-results-meta__location {
+  flex-shrink: 0;
+  font-weight: 400;
+}
+
+.srp-results-meta__text {
+  flex-shrink: 0;
+}
+
+.srp-results-meta__separator {
+  flex: 1;
+  min-width: 2.75rem;
+  height: 1px;
+  margin-left: 4px; /* 8px from location text (4 gap + 4) */
+  border: none;
+  /* Figma Line 42 — dashed stroke #ddd9ce */
+  background-color: transparent;
+  background-image: linear-gradient(
+    to right,
+    var(--ds-color-warm-neutral-300) 0 3px,
+    transparent 3px 7px
+  );
+  background-size: 7px 1px;
+  background-repeat: repeat-x;
+  background-position: left center;
+  align-self: center;
+}
+
+.srp-option-section:last-child {
+  padding-bottom: var(--ds-space-xl);
+}
+
+.srp-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-xs); /* 8px page-bg separator between cards */
+}
+
+/* -- Card -- */
+.srp-card {
+  background-color: var(--ds-surface-white);
+  border-radius: var(--ds-radius-none);
+  padding: var(--ds-space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-s);
+}
+
+.srp-card[role="link"] {
+  cursor: pointer;
+}
+
+/* Seller/agent header strip */
+.srp-card-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-xs);
+}
+
+.srp-card-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+}
+
+.srp-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--ds-space-2xs);
+  border-radius: var(--ds-radius-xs);
+  background-color: var(--ds-surface-brand-subtle);
+  color: var(--ds-text-brand);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-xs);
+  letter-spacing: var(--ds-letter-spacing-md);
+  white-space: nowrap;
+}
+
+.srp-card-strip-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-xs);
+  white-space: nowrap;
+}
+
+.srp-card-strip-meta svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--ds-color-warm-neutral-700);
+}
+
+/* Two images side by side */
+.srp-card-images {
+  display: flex;
+  gap: var(--ds-space-3xs);
+  position: relative;
+}
+
+.srp-card-images > img {
+  /* flex: 1 (not width: 50%) -- two 50%-width items plus the flex gap
+     between them add up to MORE than 100% of the row, which was pushing
+     the whole page into horizontal overflow/scroll on mobile. */
+  flex: 1 1 0;
+  min-width: 0;
+  width: 0;
+  height: 116px;
+  object-fit: cover;
+  border-radius: var(--ds-radius-l);
+  display: block;
+  background-color: var(--ds-surface-default);
+}
+
+.srp-card-image-count {
+  position: absolute;
+  right: var(--ds-space-2xs);
+  bottom: var(--ds-space-2xs);
+  padding: 2px var(--ds-space-2xs);
+  border-radius: var(--ds-radius-xs);
+  background-color: rgba(15, 14, 13, 0.6);
+  color: var(--ds-text-inverse);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-xs);
+  pointer-events: none;
+}
+
+.srp-card-image-chrome .srp-card-image-count {
+  right: var(--ds-space-xs);
+  bottom: var(--ds-space-xs);
+  z-index: 2;
+  padding: var(--ds-space-2xs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-s);
+  background-color: color-mix(in srgb, var(--ds-color-grey-neutral-900) 72%, transparent);
+  color: var(--ds-color-warm-neutral-0);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s);
+  letter-spacing: var(--ds-letter-spacing-s);
+  white-space: nowrap;
+}
+
+/* Option 1 — every card: one image per view (6:5), swipe for more */
+.srp-option-section--image-carousel .srp-card-images--carousel {
+  overflow: hidden;
+  border-radius: var(--ds-radius-l);
+}
+
+.srp-option-section--image-carousel .srp-card-images-stage {
+  position: relative;
+  touch-action: pan-x pan-y;
+  border-radius: var(--ds-radius-l);
+  overflow: hidden;
+}
+
+.srp-option-section--image-carousel .srp-card-images--carousel .srp-card-images-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+  z-index: 0;
+}
+
+.srp-option-section--image-carousel .srp-card-images--carousel .srp-card-images-track::-webkit-scrollbar {
+  display: none;
+}
+
+.srp-option-section--image-carousel .srp-card-images--carousel .srp-card-images-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  aspect-ratio: 6 / 5;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background-color: var(--ds-surface-default);
+}
+
+.srp-card-image-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.srp-card-image-chrome .srp-card-shortlist-btn {
+  pointer-events: auto;
+}
+
+/* Seller row — above image on Option 1 cards */
+.srp-card-seller {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-s);
+}
+
+.srp-card-seller__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3xs);
+}
+
+.srp-card-seller__name {
+  margin: 0;
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-m);
+}
+
+.srp-card-seller__updated {
+  margin: 0;
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-s);
+}
+
+.srp-card-seller__photo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ds-radius-s);
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.srp-card-agent-chip {
+  position: absolute;
+  bottom: var(--ds-space-xs);
+  left: var(--ds-space-xs);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+  padding: var(--ds-space-2xs) var(--ds-space-xs);
+  border-radius: var(--ds-radius-s);
+  background-color: color-mix(in srgb, var(--ds-color-grey-neutral-900) 72%, transparent);
+  box-shadow: 0 2px 8px rgba(15, 14, 13, 0.16);
+  pointer-events: none;
+}
+
+.srp-card-agent-photo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+.srp-card-agent-badge {
+  color: var(--ds-color-warm-neutral-0);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s);
+  letter-spacing: var(--ds-letter-spacing-s);
+  white-space: nowrap;
+}
+
+.srp-card-carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-2xs);
+  border: none;
+  background: none;
+  color: var(--ds-color-warm-neutral-0);
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.srp-card-carousel-nav--prev {
+  left: var(--ds-space-2xs);
+}
+
+.srp-card-carousel-nav--next {
+  right: var(--ds-space-2xs);
+}
+
+.srp-card-carousel-nav__icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  filter: drop-shadow(0 1px 3px rgba(15, 14, 13, 0.32));
+}
+
+.srp-card-carousel-nav:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.srp-card-badges--overlay {
+  position: absolute;
+  top: var(--ds-space-xs);
+  left: var(--ds-space-xs);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+}
+
+.srp-card-badges--overlay .srp-badge--pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+  border-radius: var(--ds-radius-s);
+  padding: var(--ds-space-2xs) var(--ds-space-xs);
+  background-color: color-mix(in srgb, var(--ds-color-warm-neutral-0) 92%, transparent);
+  border: 1px solid var(--ds-color-warm-neutral-200);
+  box-shadow: none;
+  color: color-mix(in srgb, var(--ds-color-grey-neutral-900) 92%, transparent);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s);
+}
+
+.srp-badge-verified-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.srp-badge-verified-icon path {
+  fill: var(--ds-semantic-icon-success);
+}
+
+.srp-card-shortlist-btn {
+  position: absolute;
+  top: var(--ds-space-xs);
+  right: var(--ds-space-xs);
+  padding: 0;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+}
+
+.srp-card-shortlist-btn .srp-card-shortlist-icon {
+  width: 26px;
+  height: 26px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.srp-card-shortlist-btn .srp-card-shortlist-icon__shape {
+  fill: color-mix(in srgb, var(--ds-color-grey-neutral-900) 60%, transparent);
+  stroke: var(--ds-color-warm-neutral-0);
+  stroke-width: 10;
+  stroke-linejoin: round;
+}
+
+.srp-card-image-dots {
+  position: absolute;
+  left: 50%;
+  bottom: var(--ds-space-xs);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 8px;
+  pointer-events: none;
+}
+
+.srp-card-image-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--ds-radius-full);
+  background-color: rgba(255, 255, 255, 0.45);
+  transform: scale(1);
+  opacity: 0.45;
+  transition:
+    transform 0.32s ease,
+    opacity 0.32s ease,
+    background-color 0.25s ease;
+}
+
+.srp-card-image-dot[hidden] {
+  display: none;
+}
+
+.srp-card-image-dot--active {
+  transform: scale(1);
+  opacity: 1;
+  background-color: var(--ds-color-warm-neutral-0);
+}
+
+.srp-card-image-dot--preview {
+  transform: scale(1);
+  opacity: 0.55;
+}
+
+.srp-card-image-dot--enter {
+  animation: srp-card-image-dot-enter 0.28s ease;
+}
+
+@keyframes srp-card-image-dot-enter {
+  from {
+    opacity: 0;
+    transform: translateX(6px) scale(0.45);
+  }
+
+  to {
+    opacity: 0.55;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Meta row: BHK + price/sqft */
+.srp-card-image-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-s);
+  flex-wrap: wrap;
+}
+
+.srp-card-meta-item {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ds-text-secondary);
+  font-family: var(--ds-font-family-primary);
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-m);
+  white-space: nowrap;
+}
+
+.srp-card-meta-divider {
+  width: 2px;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: var(--ds-color-warm-neutral-300);
+}
+
+.srp-card-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: var(--ds-radius-s);
+  border: 1px solid color-mix(in srgb, var(--ds-color-warm-neutral-200) 80%, transparent);
+  background-color: color-mix(in srgb, var(--ds-color-warm-neutral-200) 35%, var(--ds-color-warm-neutral-0));
+  color: var(--ds-text-secondary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s);
+  letter-spacing: var(--ds-letter-spacing-s);
+  white-space: nowrap;
+  text-transform: none;
+}
+
+.srp-card-meta-pill--status {
+  gap: var(--ds-space-2xs);
+}
+
+.srp-card-meta-pill__sep {
+  width: 3px;
+  height: 14px;
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-semantic-icon-success);
+  flex-shrink: 0;
+}
+
+.srp-card-status-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2xs);
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s);
+  line-height: var(--ds-line-height-s);
+}
+
+.srp-card-status-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--ds-radius-full);
+  background-color: var(--ds-border-default);
+  flex-shrink: 0;
+}
+
+/* Price -- largest/boldest text on the card */
+.srp-card-price {
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-3xl);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-3xl);
+  margin: 0;
+}
+
+.srp-card-name {
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-m);
+  margin: 0;
+}
+
+.srp-card-config {
+  color: var(--ds-text-secondary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m);
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-m);
+  margin: 0;
+}
+
+.srp-card-address {
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-s);
+  margin: 0;
+}
+
+.srp-card-divider {
+  height: 1px;
+  background-color: var(--ds-border-subtle);
+  border: none;
+  margin: 0;
+}
+
+/* CTA buttons row */
+.srp-card-cta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-xs);
+}
+
+.srp-card-cta-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-3xs);
+  padding: var(--ds-space-xs) var(--ds-space-s);
+  border-radius: var(--ds-radius-s);
+  border: 1px solid var(--ds-border-default);
+  background-color: var(--ds-surface-white);
+  color: var(--ds-text-primary);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m);
+  font-weight: var(--ds-font-weight-medium);
+  letter-spacing: var(--ds-letter-spacing-s);
+  line-height: var(--ds-line-height-m);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.srp-card-cta-btn--brand {
+  background-color: var(--ds-surface-brand);
+  border-color: var(--ds-surface-brand);
+  color: var(--ds-text-inverse);
+}
+
+.srp-card-cta-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Option 1 — WhatsApp secondary + primary Contact */
+.srp-option-section--image-carousel .srp-card-cta-row--contact-only {
+  display: flex;
+  align-items: stretch;
+  gap: var(--ds-space-xs);
+}
+
+.srp-option-section--image-carousel .srp-card-cta-btn--whatsapp {
+  flex: 0 0 auto;
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+  border-radius: var(--ds-radius-m);
+  border: 1px solid var(--ds-border-brand);
+  background-color: var(--ds-surface-white);
+}
+
+.srp-option-section--image-carousel .srp-card-cta-btn--whatsapp svg {
+  width: 20px;
+  height: 20px;
+}
+
+.srp-option-section--image-carousel .srp-card-cta-btn--contact-primary {
+  flex: 1;
+  min-height: 48px;
+  padding: var(--ds-space-s) var(--ds-space-m);
+  border-radius: var(--ds-radius-m);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-l);
+}
+
+.srp-card--option1 {
+  gap: var(--ds-space-m);
+  --srp-card-tracking: 0.015em;
+}
+
+.srp-card--option1 .srp-card-image-chrome .srp-card-image-count,
+.srp-card--option1 .srp-card-agent-badge {
+  font-size: var(--ds-font-size-s);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s);
+  letter-spacing: var(--srp-card-tracking);
+}
+
+.srp-card--option1 .srp-card-seller__name,
+.srp-card--option1 .srp-card-seller__updated,
+.srp-card--option1 .srp-card-price,
+.srp-card--option1 .srp-card-name,
+.srp-card--option1 .srp-card-address,
+.srp-card--option1 .srp-card-meta-item,
+.srp-card--option1 .srp-card-cta-btn,
+.srp-card--option1 .srp-card-badges--overlay .srp-badge--pill {
+  letter-spacing: var(--srp-card-tracking);
+}
+
+.srp-card--option1 .srp-card-price {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 22px;
+  line-height: 30px;
+}
+
+.srp-card--option1 .srp-card-project {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2xs);
+  margin-bottom: 0;
+}
+
+.srp-card--option1 .srp-card-name {
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.srp-card--option1 .srp-card-address {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-2xs);
+}
+
+.srp-card-address__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: block;
+  color: inherit;
+}
+
+.srp-card-address__icon path {
+  fill: currentColor;
+}
+
+/* ============================================================
+   Imagine SRP cards — Figma component set 4436:6443
+   Variants: single-resale | single-project | multiple-project | multiple-resale
+   Seller strip (Sunder / Lodha + photo) toggled via SRP_CARD_SHOW_SELLER
+   / listing.showSeller → .srp-card-media--seller
+   ============================================================ */
+
+.srp-option-section--imagine {
+  padding: 0;
+}
+
+.srp-option-section--imagine:last-child {
+  padding-bottom: var(--ds-space-xl);
+}
+
+.srp-option-section--imagine .srp-card-list {
+  gap: var(--ds-space-xs); /* 8px page-bg separator */
+}
+
+/* Card shell — 360 wide, white, 12 top/bottom, children inset 16 */
+.srp-card--imagine {
+  box-sizing: border-box;
+  padding: 12px 0;
+  gap: 12px;
+  border-radius: 0;
+  background-color: var(--ds-color-warm-neutral-0);
+}
+
+/* ---- Media: image; seller strip markup kept in HTML for easy restore ---- */
+.srp-card--imagine .srp-card-media {
+  position: relative;
+  margin: 0 16px;
+  width: auto;
+  max-width: none;
+}
+
+/*
+ * Seller strip (above image) — disabled visually.
+ * Restore with:
+ *   background-color: var(--ds-color-lavender-mist-50);
+ *   border-radius: var(--ds-radius-l);
+ *   padding-top: 8px;
+ * and reset .srp-card-seller to static flex + margin: 0 12px 8px (not absolute).
+ */
+.srp-card--imagine .srp-card-media--seller {
+  background-color: transparent;
+  border-radius: 0;
+  padding-top: 0;
+}
+
+/* Seller chip on image — permanently hidden (moved to CTA owner meta) */
+.srp-card--imagine .srp-card-seller {
+  display: none !important;
+}
+
+.srp-card--imagine .srp-card-seller__photo {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+  box-sizing: border-box;
+  border: none;
+  background-color: var(--ds-color-warm-neutral-100);
+}
+
+.srp-card--imagine .srp-card-seller__photo--brand {
+  border-radius: 4px;
+  object-fit: contain;
+  background-color: #ffffff;
+}
+
+.srp-card--imagine .srp-card-seller__name {
+  margin: 0;
+  color: #000000;
+  font-family: var(--ds-font-family-primary);
+  font-size: 12px;
+  font-weight: var(--ds-font-weight-medium);
+  line-height: 16px;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Image carousel — 328×240, r16 */
+.srp-option-section--imagine .srp-card-images--carousel {
+  position: relative;
+  display: block;
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--ds-radius-l);
+}
+
+.srp-option-section--imagine .srp-card-images-stage {
+  position: relative;
+  touch-action: pan-x pan-y;
+  border-radius: var(--ds-radius-l);
+  overflow: hidden;
+}
+
+.srp-option-section--imagine .srp-card-images--carousel .srp-card-images-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: relative;
+  z-index: 0;
+}
+
+.srp-option-section--imagine .srp-card-images--carousel .srp-card-images-track::-webkit-scrollbar {
+  display: none;
+}
+
+.srp-option-section--imagine .srp-card-images--carousel .srp-card-images-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  height: 240px;
+  aspect-ratio: auto;
+  object-fit: cover;
+  border-radius: 0;
+  display: block;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background-color: var(--ds-surface-default);
+}
+
+.srp-card--imagine .srp-card-image-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Overlays are absolutely placed — no chrome padding (avoids double inset). */
+  padding: 0;
+  display: block;
+  box-sizing: border-box;
+}
+
+.srp-card--imagine .srp-card-image-chrome__top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 24px;
+  pointer-events: none;
+}
+
+.srp-card--imagine .srp-card-badges--overlay {
+  position: static;
+  top: auto;
+  left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1 1 auto;
+  max-width: calc(100% - 32px); /* leave room for 24px heart + gap */
+}
+
+/* Cream gallery-index pills — #f6f4ed, r8, h24, pad 8 */
+.srp-card--imagine .srp-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  box-sizing: border-box;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background-color: var(--ds-color-warm-neutral-100); /* #f6f4ed */
+  color: var(--ds-color-grey-neutral-900);
+  font-family: var(--ds-font-family-primary);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.srp-card--imagine .srp-card-badge-check {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  display: block;
+  color: var(--ds-semantic-icon-success);
+}
+
+.srp-card--imagine .srp-card-badge__sep {
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  margin: 0 4px;
+  background-color: var(--ds-color-warm-neutral-300); /* #ddd9ce */
+  flex-shrink: 0;
+}
+
+.srp-card--imagine .srp-card-badge__label {
+  display: inline-block;
+}
+
+/* Heart — Figma: 24×24, dark translucent fill + white stroke */
+.srp-card--imagine .srp-card-shortlist-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: auto;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: transparent;
+  filter: none;
+  pointer-events: auto;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.srp-card--imagine .srp-card-shortlist-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  overflow: visible;
+}
+
+.srp-card--imagine .srp-card-shortlist-icon__shape {
+  fill: rgb(15 14 13 / 0.6); /* #0f0e0d @ 60% — Figma photo-overlay fill */
+  stroke: var(--ds-color-warm-neutral-0);
+  stroke-width: 12;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  paint-order: stroke fill;
+}
+
+/* Gallery dots — horizontally centered on image */
+.srp-card--imagine .srp-card-image-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 20px;
+  min-height: 20px;
+  pointer-events: none;
+}
+
+.srp-card--imagine .srp-card-image-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 30px;
+  background-color: var(--ds-color-warm-neutral-0);
+  opacity: 0.45;
+  transform: none;
+}
+
+.srp-card--imagine .srp-card-image-dot--active {
+  opacity: 1;
+  background-color: var(--ds-color-warm-neutral-0);
+  transform: none;
+}
+
+.srp-card--imagine .srp-card-image-dot--preview {
+  opacity: 0.45;
+  transform: none;
+}
+
+/* ---- Body ---- */
+.srp-card--imagine .srp-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 16px;
+  margin: 0;
+}
+
+.srp-card--imagine .srp-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.srp-card--imagine .srp-card-title {
+  margin: 0;
+  color: var(--ds-color-grey-neutral-900);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-lg); /* 16 — match price */
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-l); /* 22 — match price */
+  letter-spacing: 0;
+}
+
+.srp-card--imagine .srp-card-address {
+  margin: 0;
+  color: var(--ds-color-grey-neutral-800); /* #444 */
+  font-family: var(--ds-font-family-primary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.srp-card--imagine .srp-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--ds-color-grey-neutral-800);
+  font-family: var(--ds-font-family-primary);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.srp-card--imagine .srp-card-meta__sep {
+  display: inline-block;
+  width: 1px;
+  height: 11px;
+  background-color: var(--ds-color-warm-neutral-300); /* #ddd9ce */
+  flex-shrink: 0;
+}
+
+.srp-card--imagine .srp-card-meta__item {
+  flex-shrink: 0;
+}
+
+.srp-card--imagine .srp-card-price {
+  margin: 0;
+  color: var(--ds-color-grey-neutral-900);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-lg); /* 16 — smaller than title */
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-l); /* 22 */
+  letter-spacing: 0;
+}
+
+/* Config grid — Multiple/* variants */
+.srp-card--imagine .srp-card-configs {
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 54px;
+  padding: 8px 12px;
+  border: 1px solid var(--ds-color-warm-neutral-200); /* #edebdf */
+  border-radius: var(--ds-radius-m); /* 12 */
+  gap: 0;
+}
+
+.srp-card--imagine .srp-card-configs__col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+}
+
+.srp-card--imagine .srp-card-configs__sep {
+  flex: 0 0 auto;
+  width: 1px;
+  align-self: center;
+  height: 32px;
+  margin: 0 12px;
+  background-color: var(--ds-color-warm-neutral-200); /* #edebdf */
+}
+
+.srp-card--imagine .srp-card-configs__label {
+  color: var(--ds-color-grey-neutral-800);
+  font-family: var(--ds-font-family-primary);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0;
+}
+
+.srp-card--imagine .srp-card-configs__price {
+  color: var(--ds-color-grey-neutral-900);
+  font-family: var(--ds-font-family-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* ---- CTA row — owner meta (left) + medium CTAs (right, 40h) ---- */
+.srp-card--imagine .srp-card-cta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-s); /* 12 */
+  padding: 0 var(--ds-space-m); /* 16 */
+  /* Card gap is 12; pull CTA up so price→CTA reads as ~4 */
+  margin: calc(var(--ds-space-2xs) - var(--ds-space-s)) 0 0; /* 4 - 12 = -8 */
+  min-height: var(--ds-space-3xl); /* 40 */
+}
+
+/* Config grid cards: keep full body→CTA gap (negative margin was for price only) */
+.srp-card--imagine:has(.srp-card-configs) .srp-card-cta-row {
+  margin-top: 0;
+}
+
+.srp-card--imagine .srp-card-owner-meta {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-height: var(--ds-space-3xl); /* ≤ CTA height (40) */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ds-space-2xs); /* 4 */
+  overflow: hidden;
+}
+
+/* Agent (Sunder Homes): subtle L→R wash + clean inset */
+.srp-card--imagine .srp-card-owner-meta--agent {
+  max-height: none;
+  min-height: var(--ds-space-3xl); /* 40 */
+  box-sizing: border-box;
+  padding: var(--ds-space-2xs) var(--ds-space-xs) var(--ds-space-2xs) var(--ds-space-2xs); /* 4 8 4 4 */
+  gap: var(--ds-space-xs); /* 8 */
+  border-radius: var(--ds-radius-m); /* 12 */
+  background: linear-gradient(
+    90deg,
+    var(--ds-color-lavender-mist-100) 0%,
+    var(--ds-surface-white) 100%
+  );
+}
+
+.srp-card--imagine .srp-card-owner-meta__photo {
+  width: var(--ds-space-2xl); /* 32 */
+  height: var(--ds-space-2xl);
+  border-radius: var(--ds-radius-s); /* 8 */
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+  background-color: var(--ds-surface-subtle);
+}
+
+.srp-card--imagine .srp-card-owner-meta__photo--brand {
+  object-fit: contain;
+  background-color: var(--ds-surface-white);
+}
+
+.srp-card--imagine .srp-card-owner-meta__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--ds-space-3xs); /* 2 */
+  min-width: 0;
+  overflow: hidden;
+}
+
+.srp-card--imagine .srp-card-owner-meta__name {
+  margin: 0;
+  min-width: 0;
+  color: var(--ds-color-grey-neutral-900);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-s); /* 12 */
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-s); /* 16 */
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.srp-card--imagine .srp-card-owner-meta__sub {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2xs); /* 4 */
+  color: var(--ds-color-grey-neutral-800);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-xs); /* 10 */
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-xs); /* 12 */
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.srp-card--imagine .srp-card-owner-meta__sep {
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  background-color: var(--ds-color-warm-neutral-300);
+  flex-shrink: 0;
+}
+
+.srp-card--imagine .srp-card-cta-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+  gap: var(--ds-space-xs); /* 8 */
+  height: var(--ds-space-3xl); /* 40 */
+}
+
+.srp-card--imagine .srp-card-cta-btn--whatsapp {
+  flex: 0 0 var(--ds-space-3xl);
+  width: var(--ds-space-3xl); /* 40 */
+  min-width: var(--ds-space-3xl);
+  height: var(--ds-space-3xl);
+  min-height: var(--ds-space-3xl);
+  padding: 0;
+  border-radius: var(--ds-radius-m);
+  border: 1px solid var(--ds-color-purple-700); /* #4a16d9 */
+  background-color: var(--ds-color-warm-neutral-0);
+  color: var(--ds-color-purple-700);
+}
+
+.srp-card--imagine .srp-card-cta-btn--whatsapp svg,
+.srp-card--imagine .srp-card-cta-whatsapp-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.srp-card--imagine .srp-card-cta-btn--contact-primary {
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: var(--ds-space-3xl);
+  height: var(--ds-space-3xl);
+  padding: 0 var(--ds-space-2xl); /* 32 — mid between hug-24 and fill */
+  border-radius: var(--ds-radius-m);
+  border: 1px solid var(--ds-color-purple-700);
+  background-color: var(--ds-color-purple-700);
+  color: var(--ds-color-warm-neutral-0);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m); /* 14 */
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-m); /* 20 */
+  letter-spacing: 0.1px;
+}
+
+/* Phone CTAs: same hierarchy — WA + Dialer + View phone on the right */
+.srp-card--imagine .srp-card-cta-row--phone .srp-card-cta-actions {
+  gap: var(--ds-space-xs); /* 8 */
+}
+
+.srp-card--imagine .srp-card-cta-btn--dialer {
+  flex: 0 0 var(--ds-space-3xl);
+  width: var(--ds-space-3xl);
+  min-width: var(--ds-space-3xl);
+  height: var(--ds-space-3xl);
+  min-height: var(--ds-space-3xl);
+  padding: 0;
+  border-radius: var(--ds-radius-m);
+  border: 1px solid var(--ds-color-purple-700);
+  background-color: var(--ds-color-warm-neutral-0);
+  color: var(--ds-color-purple-700);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.srp-card--imagine .srp-card-cta-dialer-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: currentColor;
+  color: var(--ds-color-purple-700);
+}
+
+.srp-card--imagine .srp-card-cta-btn--view-phone {
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: var(--ds-space-3xl);
+  height: var(--ds-space-3xl);
+  padding: 0 var(--ds-space-2xl); /* 32 — mid between hug-24 and fill */
+  border-radius: var(--ds-radius-m);
+  border: 1px solid var(--ds-color-purple-700);
+  background-color: var(--ds-color-purple-700);
+  color: var(--ds-color-warm-neutral-0);
+  font-family: var(--ds-font-family-primary);
+  font-size: var(--ds-font-size-m);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-m);
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+/* Hide seller entirely when flag off (no leftover lavender) */
+.srp-card--imagine:not(.srp-card--seller) .srp-card-seller {
+  display: none;
+}
